@@ -1,0 +1,7 @@
+{
+  "id": "com.twitch.twitchspawn",
+  "name": "Twitch Spawn Mod",
+  "version": "1.0.0",
+  "author": "YourName",
+  "description": "Allows Twitch chat to spawn items and enemies."
+}
