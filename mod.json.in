@@ -1,7 +1,8 @@
 {
-  "id": "com.example.my_mod",
-  "name": "Twitch Spawner",
-  "version": "@PROJECT_VERSION@",
-  "author": "You",
-  "description": "An example Dusklight mod"
+  "id": "com.owner.template_mod",
+  "name": "Twilight Princess Dusklight Mod",
+  "version": "1.0.0",
+  "author": "Dakota",
+  "description": "Twitch chat command spawner mod for Twilight Princess",
+  "target_version": "2.0.3"
 }
