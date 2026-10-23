@@ -1,6 +1,6 @@
 {
   "id": "com.example.my_mod",
-  "name": "My Mod",
+  "name": "Twitch Spawner",
   "version": "@PROJECT_VERSION@",
   "author": "You",
   "description": "An example Dusklight mod"
