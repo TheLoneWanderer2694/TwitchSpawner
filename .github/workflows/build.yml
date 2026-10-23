@@ -13,11 +13,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Setup Ninja
-      uses: ashutoshvarma/setup-ninja@v2
-
     - name: Configure CMake
-      run: cmake -B build -G Ninja -DDUSK_BUILDING_GAME=OFF -DDUSK_BUILD_MODS_ONLY=ON
+      run: cmake -B build -DDUSK_BUILDING_GAME=OFF -DDUSK_BUILD_MODS_ONLY=ON
 
     - name: Build Mod
       run: cmake --build build --config Release
