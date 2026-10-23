@@ -4,5 +4,9 @@
   "version": "1.0.0",
   "author": "Dakota",
   "description": "Twitch chat command spawner mod for Twilight Princess",
-  "target_version": "2.0.3"
+  "type": "native",
+  "target_version": "2.0.3",
+  "native_library": {
+    "win32-x86_64": "lib/win32-x86_64/template_mod.dll"
+  }
 }
