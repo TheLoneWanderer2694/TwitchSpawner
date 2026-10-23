@@ -1,45 +1,65 @@
 #include "mods/service.hpp"
 #include "mods/svc/hook.hpp"
 #include "mods/svc/log.hpp"
+#include <mods/api.h>
+#include <mods/svc/actor.h>
+#include <string>
+#include <algorithm>
 
-// Game includes
-#include "d/d_item_data.h"
-#include "f_op/f_op_actor_mng.h"
-
-DEFINE_MOD();
-
-IMPORT_SERVICE(LogService, svc_log);
-IMPORT_SERVICE(HookService, svc_hook);
-
-// Example game hook: turn heart drops into green rupees.
-DEFINE_HOOK(fopAcM_createItem, CreateItem);
-
-static HookAction on_create_item_pre(ModContext*, void* args, void*, void*) {
-    int& itemNo = mods::arg_ref<int>(args, 1);
-    if (itemNo == dItemNo_HEART_e) {
-        itemNo = dItemNo_GREEN_RUPEE_e;
-    }
-    return HOOK_CONTINUE;
+// Convert string to lowercase for case-insensitive chat command matching
+std::string ToLower(std::string str) {
+    std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+    return str;
 }
 
-extern "C" {
-MOD_EXPORT ModResult mod_initialize(ModError*) {
-    // Installs a pre hook on fopAcM_createItem.
-    ModResult result = mods::hook::add_pre<CreateItem>(on_create_item_pre);
-    if (result != MOD_OK) {
-        mods::log::error("failed to install pre_hook on_create_item_pre");
-        return result;
-    }
+// Map Twitch chat commands to Twilight Princess actor profiles
+std::string ResolveActorName(const std::string& inputCmd) {
+    std::string cmd = ToLower(inputCmd);
 
-    mods::log::info("my_mod initialized");
-    return MOD_OK;
+    // --- ENEMIES ---
+    if (cmd == "bokoblin" || cmd == "boko")       return "MON_a";      // Standard Bokoblin
+    if (cmd == "redbokoblin")                      return "MON_a2";     // Red Bokoblin
+    if (cmd == "bulblin")                         return "MBN_a";      // Bulblin
+    if (cmd == "keese")                           return "MAN_a";      // Keese
+    if (cmd == "firekeese")                       return "MAN_b";      // Fire Keese
+    if (cmd == "icekeese")                        return "MAN_c";      // Ice Keese
+    if (cmd == "stalfos")                         return "MCN_a";      // Stalfos
+    if (cmd == "darknut")                         return "MAD_a";      // Darknut
+    if (cmd == "lizalfos")                        return "MAS_a";      // Lizalfos
+    if (cmd == "dinafos")                         return "MAT_a";      // Dinolfos
+    if (cmd == "chu" || cmd == "chuchu")          return "WON_a";      // Chu Chu
+    if (cmd == "poo" || cmd == "poe")             return "WGN_a";      // Imp Poe
+    if (cmd == "skulltula")                       return "Wspcial_l";  // Skulltula
+
+    // --- ITEMS & DROPS ---
+    if (cmd == "heart")                           return "d_a_item";   // Recovery Heart
+    if (cmd == "rupee")                           return "d_a_item";   // Green Rupee
+    if (cmd == "redrupee")                        return "d_a_item";   // Red Rupee
+    if (cmd == "purplerupee")                     return "d_a_item";   // Purple Rupee
+    if (cmd == "bomb")                            return "d_a_item";   // Normal Bomb
+    if (cmd == "waterbomb")                       return "d_a_item";   // Water Bomb
+    if (cmd == "arrow" || cmd == "arrows")        return "d_a_item";   // Arrow Bundle
+    if (cmd == "smallkey")                        return "Lv5_KEY";    // Small Key
+
+    // --- NPCS & SPECIAL ---
+    if (cmd == "midna")                           return "Midna";      // Midna
+    if (cmd == "zelda")                           return "Zelda";      // Zelda
+    if (cmd == "zant")                            return "Zant";       // Zant
+    if (cmd == "maro")                            return "Maro";       // Maro
+    if (cmd == "yelia" || cmd == "ilia")          return "Yelia";      // Ilia
+    if (cmd == "pot" || cmd == "jar")             return "K_tubo02";   // Breakable Pot
+
+    // Default fallback if command isn't recognized
+    return "MON_a"; 
 }
 
-MOD_EXPORT ModResult mod_update(ModError*) {
-    return MOD_OK;
+void HandleChatCommand(const std::string& command) {
+    std::string actorName = ResolveActorName(command);
+
+    // Call Dusklight's actor service to spawn the entity at Link's current position
+    // Dusklight::Svc::Actor::Spawn(actorName.c_str());
 }
 
-MOD_EXPORT ModResult mod_shutdown(ModError*) {
-    return MOD_OK;
-}
+bool DUSKLIGHT_MOD_INIT() {
+    return true;
 }
