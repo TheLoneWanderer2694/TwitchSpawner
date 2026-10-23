@@ -18,7 +18,7 @@ FetchContent_MakeAvailable(dusklight)
 
 add_mod(template_mod
     SOURCES src/mod.cpp
-    MOD_JSON mod.json.in
+    MOD_JSON mod.json
 )
 
 set_target_properties(template_mod PROPERTIES
